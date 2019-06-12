@@ -17,6 +17,13 @@ public class SVG implements AutoCloseable {
                 "height=\"" + height + "\"> ";
         fileOut.println(fileSettings);
 
+        Tag background = new Tag("rect");
+        background.set("width", String.valueOf(width));
+        background.set("height", String.valueOf(height));
+        background.set("fill", Settings.getInstance().getBackground());
+
+        addTag(background);
+
         fileOut.flush();
     }
 

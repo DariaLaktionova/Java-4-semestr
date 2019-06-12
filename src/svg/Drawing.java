@@ -1,5 +1,6 @@
 package svg;
 
+import java.util.Map;
 import java.util.Random;
 
 public class Drawing {
@@ -23,11 +24,41 @@ public class Drawing {
         g.set("transform", "translate(150, 150)");
         Tag gClose = new Tag("g", TagType.CLOSE);
 
-        try (SVG svg = new SVG("b.svg", 300, 300)) {
+        try (SVG svg = new SVG("b.svg", Settings.getInstance().getWidth(), Settings.getInstance().getHeight())) {
 
-            Random random = new Random();
+            Random random = Settings.getInstance().getRandom();
+            ShapeFactory shapeFactory = new ShapeFactory();
 
-            /*Shape nShape = new SmallSquare();
+            Map<String, Integer> oneShapeOneCount = Settings.getInstance().getShapeWithCount();
+
+            oneShapeOneCount.forEach((key, value) -> {
+
+                String figureName = key;
+                String figureNameDescription = Settings.getInstance().getShapeDescription(figureName);
+                try {
+                    Shape figureShape = shapeFactory.create(figureNameDescription);
+
+
+                    for (int i = 0; i < value; i++) {
+                        PositionedShape nShape = new PositionedShape(figureShape,
+                                random.nextInt(Settings.getInstance().getWidth()),
+                                random.nextInt(Settings.getInstance().getHeight()));
+                        nShape.draw(svg);
+                    }
+
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            });
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+}
+
+  /*Shape nShape = new SmallSquare();
             nShape.draw(svg);
 
             svg.addTag(rect1);
@@ -39,19 +70,3 @@ public class Drawing {
 
             PositionedShape nShape1 = new PositionedShape(new RedCircle(),50, 50);
             nShape1.draw(svg);*/
-
-            for (int i = 0; i < 150; i++) {
-                PositionedShape nShape = new PositionedShape(new RedCircle(), random.nextInt(400), random.nextInt(400));
-                nShape.draw(svg);
-            }
-
-            for (int i = 0; i < 100; i++) {
-                PositionedShape nShape = new PositionedShape(new SmallSquare(), random.nextInt(400), random.nextInt(400));
-                nShape.draw(svg);
-            }
-
-        } catch (Exception e) {
-            System.out.println("ошибка");
-        }
-    }
-}
